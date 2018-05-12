@@ -4,11 +4,11 @@
  * */
 function cache(func){
 	let mycache = cache.cache;
-	if(mycache==null){
+	if(mycache===undefined){
 		mycache = cache.cache = {};
 	}else{
 		let curFuncName = cache.funcName;
-		if(curFuncName!=func.name){
+		if(curFuncName!==func.name){
 			cache.cache = {};
 			cache.funcName = func.name;
 		}
@@ -26,7 +26,7 @@ function cache(func){
 }
 cache.clear = function(){
 	cache.cache = {};
-}
+};
 
 /**
  * 计时

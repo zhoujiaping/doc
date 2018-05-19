@@ -1,8 +1,14 @@
 /**
 本文主要内容是ac自动机的代码实现（nodejs版）。
-ac自动机的应用，本文就不介绍了，百度一下你就知道。
-本人在学习ac自动机算法的时候，看的网上的资料都只是按照ac自动机的实现步骤进行讲解和实现，并没有分析这种算法的推理过程，所以对于其原理理解起来比较费劲，不知道实现步骤为什么要这么做，最多只是按步骤实现代码并对代码进行结果验证。私以为，学习算法，最重要的是学习思想，而不是一个结论（虽然结论也非常重要），所以在实现了代码之后（其实对其原理，也是在敲了一遍代码之后才理解的，网上的博客看完之后根本就是一脸懵逼），思考了创造这个算法的推导过程，并将其进行总结，分享给大家，如果觉得不错，希望加个关注，谢谢。
-先附上代码吧
+ac自动机的应用，比如求一个字符串中，是否出现了某些敏感词汇。
+本人在学习ac自动机算法的时候，看的网上的资料都只是按照ac自动机的实现步骤进行讲解和实现，
+并没有分析这种算法的推理过程，所以对于其原理理解起来比较费劲，
+不知道实现步骤为什么要这么做，最多只是按步骤实现代码并对代码进行结果验证。
+私以为，学习算法，最重要的是学习思想，而不是一个结论（虽然结论也非常重要），
+所以在实现了代码之后（其实对其原理，也是在敲了一遍代码之后才理解的，
+网上的博客看完之后根本就是一脸懵逼），思考了创造这个算法的推导过程，
+并将其进行总结，分享给大家，如果觉得不错，希望加个关注，谢谢。
+先附上代码吧（代码后面的内容才是精彩部分哦）
  * AC自动机
  *http://www.cnblogs.com/huangxincheng/archive/2012/12/02/2798317.html
  *https://blog.csdn.net/creatorx/article/details/71100840
@@ -41,7 +47,7 @@ function newTrie(){
         root(){
             return root;
         },
-        buildEqPointer(){//bfs(广度优先算法)构建失败指针
+        buildEqPointer(){//bfs(广度优先算法)构建等价指针
             let queue = [];
             queue.push(root);
             while(queue.length>0){
@@ -126,6 +132,17 @@ function newTrie(){
         	}
         	arr.sort((o1,o2)=>o1.id-o2.id);
         	return arr;
+        },
+        toString(){
+        	return JSON.stringify(root,(k,v)=>{
+        		if(k=='eq'){
+        			if(v!=null){
+        				return v.id;
+        			}
+        			return null;
+        		}
+        		return v;
+        	},2);
         }
     };
 }
@@ -141,9 +158,10 @@ function test(){
     //let array = trie.toArray();
     let res = trie.match('hellosherworld');
     res = trie.match('hellosherworld');
-    console.info(JSON.stringify(trie.toArray(),(k,v)=>{
+    console.info(trie.toString());
+   /* console.info(JSON.stringify(trie.toArray(),(k,v)=>{
     	return v;
-    },2));
+    },2));*/
 }
 test();
 module.exports = {

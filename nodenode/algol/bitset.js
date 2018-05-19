@@ -1,10 +1,19 @@
 /**
+ * 位图的数据结构，第一次接触是在做sql优化的时候。当时用的postgresql数据库。
+ * 它里面有个位图索引。比如有个列，它的取值是个枚举类型的某个值。
+ * 假如这个枚举类型有10个值，那么用位图索引，最大可以提升10倍的性能。
+ * 另外，位图还可以用来做不重复的正整数排序（时间复杂度为O(n)，比快速排序还快），
+ * 快速判断一个整数数组中是否有重复的值。
+ * 位图的思想，就是将元素的值、和二进制位的位置作映射，用二进制的值0或者1表示元素是否存在。
+ * 实际上是一种特殊的哈希算法。
  * Bitmap算法（java中叫BitSet，作为javascript，还是跟着java老大哥叫bitset吧）
  * http://www.cnblogs.com/huangxincheng/archive/2012/12/06/2804756.html
  */
-function newBitset(){
-	let buf = Buffer.alloc(10);
-	function resizeBuf(buf,size){
+/**
+ * 如果缓冲区不够大，就申请新的缓冲区，并且将旧的缓冲区内容拷贝到新的缓冲区。
+ * 所以为了性能，最好在创建的时候传入最大值，或者第一次调用set时传入最大值。
+ */
+function resizeBuf(buf,size){
 		let newSize = buf.length;
 		if(newSize>=size){
 			return buf;
@@ -16,6 +25,8 @@ function newBitset(){
 		buf.copy(newBuf,0,buf.length);
 		return newBuf;
 	}
+function newBitset(size=10){
+	let buf = Buffer.alloc(size);
 	return {
 		set(n){
 			if(n<1){

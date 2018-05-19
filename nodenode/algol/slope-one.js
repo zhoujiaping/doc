@@ -8,20 +8,20 @@ Rab代表A组到B组的平均差（均值化）
 m,n代表人数
 
 @Param productsScores = [
-    [4,10,8,50],//某个人的数据
+    [4,10,8,50],
     [5,12,8,48],
     [...],
     [...]
     ...
 ]
-每一行代表每个人对某个产品的打分，每一列代表某个人对各个产品的打分。
-productsScores.length=人数
-productsScores[i].length=产品数
+每一列代表每个人对某个产品的打分，每一行代表某个人对各个产品的打分。
+productsScores 行数=人数
+productsScores 列数=产品数
 @Param targetProductScores=[3,4,4.5,4] 
 代表每个人对目标产品的打分。targetProductScores.length=人数
-@Param myscores = [4,9,8,50];myscores.length=产品数
+@Param myscores = [4,9,8,50];
+myscores.length=产品数
 这个版本有问题：并不是每个人都用过所有的产品，有些人只用过部分产品。
-所以productsScores应该是某个产品各个人的打分。
 */
 let slopeOne = function(productsScores,targetProductScores,myscores){
     const personAmount = productsScores.length;
@@ -58,15 +58,16 @@ Rab代表A组到B组的平均差（均值化）
 m,n代表人数
 
 @Param scores = [
-    [[8,20],[7,18],[6,19],[5,20],[8,17],[10,19],[9,22],[8.5,25],[6,20],[7.5,19]],//[8,20]某个人对产品A打分和对目标产品的打分。
-    [[],[]...],//每项都是某个人对产品B打分和对目标产品的打分。
+    //[8,20]某个人对产品A打分和对目标产品的打分。
+    [[8,20],[7,18],[6,19],[5,20],[8,17],[10,19],[9,22],[8.5,25],[6,20],[7.5,19]],
+    //每项都是某个人对产品B打分和对目标产品的打分。
+    [[],[]...],
     [...]
     ...
 ]
 scores.length=产品数
 scores[i].length=人数(每个产品的打分人数不同)
 @Param myscores = [4,9,8,50];myscores.length=产品数
-这个版本可读性差
 */
 slopeOne = function(scores,myscores){
     let total = scores.map((prod,prodIndex)=>{

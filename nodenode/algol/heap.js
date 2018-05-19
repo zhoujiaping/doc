@@ -14,14 +14,27 @@ function isRight(i){
 function isRoot(i){
     return i===1;
 }*/
+/**
+ * 给定节点的下标，计算其父节点的下标。
+ */
 function parent(i){
-    return i/2|0;//if i>1  按位或0,可以将小数向下取整。
+    return i>>1|0;//if i>1  按位或0,可以将小数向下取整。i/2|0
 }
+/**
+ * 给定节点的下标，计算其左孩子的下标。
+ * @param i
+ * @returns {Number}
+ */
 function leftChild(i){
-    return i*2;//if 2*i<=n
+    return i<<1;//if 2*i<=n
 }
+/**
+ * 给定节点的下标，计算其右孩子的下标。
+ * @param i
+ * @returns {Number}
+ */
 function rightChild(i){
-    return 2*i+1;//if 2*i+1<=n
+    return (i<<1)+1;//if 2*i+1<=n
 }
 /*function isLeaf(i){
     return i>n/2|0;

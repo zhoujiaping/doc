@@ -1,5 +1,8 @@
 /**
  *kmp算法实现（nodejs版）
+ *可以用来实现字符串的indexOf算法。但是官方库却不用这个算法实现字符串的indexOf。
+ *比如java的String，宁愿用暴力匹配的方式。因为作者认为，通常用indexOf的场景，字符串都不大，
+ *不用担心性能问题。他是对的，我们通常都不用关心indexOf的性能，如果真的有大文本查找，自己实现一个kmp就可以了。
  */
 function calcNext(word){
 	let k = -1;

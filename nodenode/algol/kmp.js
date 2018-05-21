@@ -8,22 +8,13 @@
  * 关键是理解next数组，该函数计算next数组。
  * next数组，可以理解为content[i]和word[j]匹配失败之后，接下来word应该用哪个位置的字符去进行匹配，
  * 也就是word在匹配失败后应该往右移多少位继续匹配。
- * 要计算next，要先计算word的各个子串S(0,j)的最长相同真前缀和真后缀。
- * 其中j>=1并且j<=word.length。
- * 比如word='abcdabc'的最长相同真前缀和真后缀为'abc'。
- * 并且这里用到递推的思想，设x0x1x2x3...xj的最长相同真前缀和真后缀为S(0,k)
- * 即从第0到第k个字符， 
- * 
- * 则x0x1x2x3...xkxk+1...xjxj+1的最长相同真前缀和真后缀为
- * S(0,k+1)如果xk+1==xj+1
- * 
- * 
- * word    ='abcdabe'
- * s     a    ab   abc  abcd abcda abcdab abcdabe
- * i     0     1    2    3     4     5      6
- * len   0     0    0    0     1     2      0
- * next  -1    0    0    0     1     2      0
- * 
+ * 当然，这个位置下标，和字符串的最大相同真前缀和真后缀的长度有关系。
+ * 有很多文章在介绍kmp算法的时候，特别是计算next数组的时候，
+ * 都没有把最关键的一行代码k = next[k]的原因说明白。
+ * 由于时间原因，这篇文章也不介绍它的原因，但是这里给出一个
+ * 链接，这篇文章把k=next[k]的原理通过画几何图的方式
+ * 揭露出来。地址https://www.cnblogs.com/tangzhengyue/p/4315393.html。
+ *
  * 
  */
 function calcNext(word){

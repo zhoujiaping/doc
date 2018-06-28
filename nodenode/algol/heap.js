@@ -63,26 +63,35 @@ function shiftDown(heap,i){
     let nodes = heap.nodes;
     let left = leftChild(i);
     let right = rightChild(i);
-    if(left<=heap.size()){//left<=size
-        if(shift(heap,left,i)){
-            shiftDown(heap,left);
-        }else{
-            if(right<=heap.size() && shift(heap,right,i)){//right<=size
-                shiftDown(heap,right);
+    if(left<=heap.size()){//left<=size//有左孩子
+    	if(right<=heap.size()){//有右孩子
+    		if(heap.cmp(nodes[left],nodes[right])>0){//比较左右孩子大小
+        		if(shift(heap,left,i)){
+                    shiftDown(heap,left);
+                }
+        	}else{
+        		if(shift(heap,right,i)){
+                    shiftDown(heap,right);
+                }
+        	}
+    	}else{//
+    		if(shift(heap,left,i)){
+                shiftDown(heap,left);
             }
-        }
+    	}
     }
 }
 const proto = {
         pop:function(){
             let size = this.size();
-            if(this.size()==0){
+            if(size==0){
                 return null;
             }
             let res = this.nodes[1];
             this.nodes[1] = this.nodes[size];
             this.nodes.length = size;
             shiftDown(this,1);
+            return res;
         },
         peek:function(){
             if(this.nodes.size()>=1){
@@ -118,7 +127,7 @@ function main(){
         console.info(heap);
     });
 }
-main();
+//main();
 module.exports = {
         newHeap
 };

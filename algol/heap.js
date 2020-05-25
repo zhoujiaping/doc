@@ -119,15 +119,12 @@ let newHeap = function(cmp){
     heap.cmp = cmp;
     return heap;
 };
-function main(){
+function test(){
     let nums = [10,8,15,20,7,3,24,14,2,1];
     let heap = newHeap((o1,o2)=>o1-o2);
     nums.forEach(i=>{
         heap.add(i);
-        console.info(heap);
+        console.table(heap);
     });
 }
-//main();
-module.exports = {
-        newHeap
-};
+test();

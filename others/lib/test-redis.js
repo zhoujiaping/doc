@@ -1,0 +1,30 @@
+const redis = require('redis');
+const client = redis.createClient('6379','localhost');
+client.auth('');
+client.on('error',err=>{
+	console.error(err);
+});
+client.on('ready',()=>{
+	//
+	client.keys('*',(err,keys)=>{
+		console.info(err);
+		console.info(keys);
+	});
+	client.set('aaa','bbb',err=>{
+		console.error(err);
+	});
+	client.select('15',err=>{
+		if(err){
+			console.error(err);
+		}else{
+			client.set('str_key_0','0',(err,res)=>{
+				if(err){
+					console.error(err);
+				}else{
+					console.info(res);
+				}
+			});
+			client.end();
+		}
+	});
+});

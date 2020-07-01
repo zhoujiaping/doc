@@ -40,7 +40,6 @@ var longestPalindrome = function(s) {
 	return max.join('')
 };
 //方法二，递归。递归消耗资源太大了。。。而且明显里面有重复计算。这里可以用动态规划算法。
-let maxs = {}
 longestPalindrome0 = chs=>{
 	if(chs.length<2)return chs
 	let max1 = f1(chs)
@@ -83,6 +82,38 @@ let f3 = chs=>{
 	return max1.length>max2.length?max1:max2
 }
 longestPalindrome = s=>longestPalindrome0([...s]).join('')
-//方法三，动态规划
-
-console.info(longestPalindrome("cbbd"))
+//方法三，动态规划  p(i,j)为回文串的必要条件是p(i-1,j-1)为回文串并且s[i]==s[j],即状态转移方程。
+//边界条件 1、p(i,i)=true  2、p(i,i+1)=s[i]==s[i+1] 
+//特别要注意的是遍历的顺序,一定要按子串长度遍历
+longestPalindrome0 = chs=>{
+	if(chs.length<2)return chs
+	let p = chs.map(_=>[])
+	//console.info(p)
+	let i4max=0,j4max=-1
+	let j = 0//子串结束位置
+	//枚举子串长度
+	for(let len = 1;len<=chs.length;len++){
+		//枚举子串起始位置
+		for(let i=0;i<chs.length;i++){
+			j = i+len-1
+			if(j>=chs.length){
+				break
+			}
+			if(i==j){
+				p[i][j] = true
+			}else if(i+1==j){
+				p[i][j] = chs[i]==chs[j]
+			}else if(p[i+1][j-1] && chs[i]==chs[j]){
+				p[i][j] = true
+			}else{
+				p[i][j] = false
+			}
+			if(p[i][j] && j4max-i4max < j-i){
+				i4max = i,j4max=j
+			}
+		}
+	}
+	return chs.slice(i4max,j4max+1)
+}
+longestPalindrome = s=>longestPalindrome0([...s]).join('')
+console.info(longestPalindrome("babad"))

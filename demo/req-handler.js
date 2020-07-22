@@ -25,13 +25,12 @@ reqHandler['/test/1'] = (req,res)=>{
 	const params = querystring.parse(reqUrl.query);
 	let data = 'test';
 	res.writeHead(302, 'Found', {
-	  'X-Powered-By': 'Express',
 	  'Content-Length': 0,
 		'server': 'nginx',
 		'date': 'Wed, 06 Mar 2019 10:20:48 GMT',
 		'content-length': 0,
 		'connection': 'close',
-		'location': 'https://sfpay-sit.sf-pay.com/jyloan/index.html'
+		'location': 'https://abc.com/index.html'
 	});
 	//res.write(data);
 	res.end();

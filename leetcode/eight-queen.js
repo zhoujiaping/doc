@@ -1,5 +1,5 @@
 let n = 8;
-let cols = [];//第i行放在第cols[i]列。
+let cols = [];
 function tryRow(row){
 	for(let col=0;col<n;col++){
 		if(enabled(row,col)){

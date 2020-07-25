@@ -33,6 +33,7 @@ var findSubstring = function(s, words) {
 		tryIndex(start+1,words.concat([]),start+1)
 	}
 }
+//双hashmap算法
 findSubstring = (s,ws)=>{
 	if(s==''||ws.length==0)return []
 	let wordLen = ws[0].length

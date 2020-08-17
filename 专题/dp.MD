@@ -14,6 +14,7 @@ baike.baidu.com/item/动态规划/529408?fromtitle=动态规划算法&fromid=157
 
 动态规划的三要素：状态、状态转移方程、边界
 
+动态规划要注意处理dp数组的顺序
 
 
 

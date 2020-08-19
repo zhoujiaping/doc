@@ -20,46 +20,31 @@
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  * @param {number[]} nums
  * @return {number}
- dp思想
- 状态：dp[i,j]保存一个数组，表示从i跳到j的最短步骤
- 状态转移方程：dp[i,j] = Math.min(dp[i,k],dp[k,j]),k取1到nums[i]
- 边界：dp[x,k0] = 1,k0取1到nums[x]
+ 贪心，迭代
+ 基于官方解法稍微修改了一下，可以记录路径。
  */
-
-var jump = function(nums) {
-	let dp = nums.map((item,i)=>[])
-	let count = 0,hit=0
-	let ans = jump0(0,nums.length-1)
-	console.info(`count=${count},hit=${hit}`)
-	return ans
-	function jump0(i,j){
-		count++
-		if(dp[i][j]){
-			hit++
-			return dp[i][j]
+let jumpPath = nums =>{
+	let path=[],maxPos={from:0,to:0},end=0
+	for(let i=0;i<nums.length-1;i++){
+		if(maxPos.to<i+nums[i]){
+			maxPos.from = i,maxPos.to = i+nums[i]
 		}
-		if(i==j)return dp[i][j] = []
-		if(nums[i]==0)return dp[i][j]=null
-		if(i+nums[i]>=j){
-			return dp[i][j] = [j-i]
+		if(i==end){
+			end = maxPos.to
+			path.push(maxPos.from)
 		}
-		for(let k=i+1;k<j;k++){
-			let d1 = jump0(i,k)
-			let d2 = jump0(k,j)
-			if(d1&&d2&&(dp[i][j]==null || d1.length+d2.length<dp[i][j].length)){
-				dp[i][j] = d1.concat(d2)
-			}
-		}
-		return dp[i][j]
 	}
-};
-console.info(jump([2,3,1,1,4]))
-console.info(jump([2,1,3,2,1,2,3,1,1,5,2,3,8]))
-console.info(jump([2,1,1,2,3,1,1,2,3,4,1,2,1,1,2]))
-console.info(jump([2,3,0,1,4]))
-console.info(jump([0]))
-console.info(jump([1]))
-console.info(jump([2,0,2,4,6,0,0,3]))
+	return path
+}
+//jump = nums=>jumpPath(nums).length
+jump = jumpPath
+console.info(jump([2,3,1,1,4]))//[0,1,4]
+console.info(jump([2,1,3,2,1,2,3,1,1,5,2,3,8]))//[0,2,5,6,9,12]
+console.info(jump([2,1,1,2,3,1,1,2,3,4,1,2,1,1,2]))//[0,2,3,4,7,9,13,14]
+console.info(jump([2,3,0,1,4]))//[0,1,4]
+console.info(jump([0]))//[0]
+console.info(jump([1]))//[0]
+console.info(jump([2,0,2,4,6,0,0,3]))//[0,2,4,10]
 console.info(jump([8,6,5,2,1,8,1,8,9,7,1,9,1,0,0,3,2,3,5,8,9,4,3,6,5,9,7,9,9,7,3,0,5,1,4,8,9]))
 
 

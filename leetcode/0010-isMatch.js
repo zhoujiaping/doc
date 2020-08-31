@@ -64,14 +64,14 @@ isMatch = (s,p)=>isMatch0([...s],[...p])
 //评论区发现的方法，使用递归
 isMatch = (s,p,i=0,j=0)=>{
 	if(p.length==j)return s.length==i
-	let firstMath = i<s.length && (s[i]==p[j]||p[j]=='.')
+	let firstMatch = i<s.length && (s[i]==p[j]||p[j]=='.')
 	if(p.length>j+1 && p[j+1]=='*'){
-		return isMatch(s,p,i,j+2) || (firstMath && isMatch(s,p,i+1,j))
+		return isMatch(s,p,i,j+2) || (firstMatch && isMatch(s,p,i+1,j))
 	}else{
-		return firstMath && isMatch(s,p,i+1,j+1)
+		return firstMatch && isMatch(s,p,i+1,j+1)
 	}
 }
-/**dp*/
+/**dp 显然上面的递归版本效率更高，因为有firstMatch判断提前返回，避免了后面无意义的递归*/
 isMatch = (s,p)=>{
 	//dp[i][j]：s的前i个字符是否匹配p的前j个字符
 	let dp = [...s].map(it=>[])

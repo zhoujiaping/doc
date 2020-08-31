@@ -61,19 +61,20 @@ var isNumber = function(s) {
 	}
 	return state=='end'||dfa[state]['stop']!=null
 };
+//为了可读性，没有用数组的形式，而是用了对象的形式。如果需要提升性能，可以改为数组的形式。
 function genDfa(){
 	return {
-		'start':{
-			' ':'start',//b=>blank
-			's':'sign',//s=>sign
-			'd':'int',//d=>digit
-			'.':'n-dot'
-		},
-		'sign':{
+		'start':{//开始
+			' ':'start',
+			's':'sign',
 			'd':'int',
 			'.':'n-dot'
 		},
-		'int':{
+		'sign':{//符号
+			'd':'int',
+			'.':'n-dot'
+		},
+		'int':{//整数部分
 			'd':'int',
 			'.':'dot',
 			'e':'exp',
@@ -83,31 +84,31 @@ function genDfa(){
 		'n-dot':{//前面没有数字的时候，直接出现小数点
 			'd':'float'
 		},
-		'dot':{
+		'dot':{//小数点
 			'e':'exp',
 			'd':'float',
 			' ':'end',
 			'stop':'end'
 		},
-		'float':{
+		'float':{//小数部分
 			'd':'float',
 			'e':'exp',
 			' ':'end',
 			'stop':'end'
 		},
-		'exp':{
+		'exp':{//指数的e
 			's':'e-sign',
 			'd':'e-int',
 		},
-		'e-sign':{
+		'e-sign':{//指数的符号
 			'd':'e-int'
 		},
-		'e-int':{
+		'e-int':{//指数的整数部分
 			'd':'e-int',
 			' ':'end',
 			'stop':'end'
 		},
-		'end':{
+		'end':{//结束状态
 			' ':'end'
 		}
 	}

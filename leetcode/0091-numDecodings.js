@@ -23,21 +23,28 @@
  * @return {number}
  dp
  1：状态，dp[i]表示前i个字符的编码总数。
- 2：状态转移方程。 
- 	若s.substr(i-1,2)可解码为3个字符串，即s[i-1]为1或者2，s[i]为1到9
-		dp[i] = dp[i-1] + dp[i-2]
-	若s[i-1]为1到9
-		dp[i] = dp[i-1]
-	否则 
- 		dp[i] = dp[i-2]
- 3：初始条件。dp[0]=0,dp[1]=1
+ 3：初始条件。dp[0]=1,dp[1]=1
  */
+const twoCodes = new Set(['11','12','13','14','15','16','17','18','19','21','22','23','24','25','26'])
+const zeroCodes = new Set(['30','40','50','60','70','80','90','00'])
 var numDecodings = function(s) {
-	let dp = [1,1]
+	if(s.length==0)return 0
+	if(s[0]=='0')return 0
+	let prev=1,curr=1,temp
 	for(let k=1;k<s.length;k++){
-
-		dp[k+1] = dp[k] + dp[k-1]
+		//非法情况
+		if(zeroCodes.has(s.substr(k-1,2)))return 0
+		temp = curr
+		//如果s(k-1,k)有两种解码方式，但是s[k+1]为'0',则
+		if(twoCodes.has(s.substr(k-1,2)) && s[k+1]!='0'){
+			curr = curr + prev	
+		}else if(s[k]=='0'){
+			curr = prev	
+		}
+		prev = temp
 	}
-	return dp[s.length]
+	return curr
 };
 console.info(numDecodings('226'))
+console.info(numDecodings('110'))
+console.info(numDecodings("12120"))

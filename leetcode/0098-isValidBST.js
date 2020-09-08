@@ -37,15 +37,8 @@
  * @return {boolean}
  对于左子树，每个右节点的值的上界为根节点的值。
  */
-var isValidBST = function(root,maxBound,minBound) {
+var isValidBST = function(root,minBound=-Infinity,maxBound=Infinity) {
 	if(root==null)return true
-	if(root.left){
-		if(root.left.val>=root.val)return false
-		if(maxBound!=null && root.left.val>=maxBound)return false
-	}
-	if(root.right){
-		if(root.right.val<=root.val)return false
-		if(minBound!=null && root.right.val<=minBound)return false
-	}
-	return isValidBST(root.left,root.val,null)&&isValidBST(root.right,null,root.val)
+	if(root.val<=minBound||root.val>=maxBound)return false
+	return isValidBST(root.left,minBound,root.val)&&isValidBST(root.right,root.val,maxBound)
 };

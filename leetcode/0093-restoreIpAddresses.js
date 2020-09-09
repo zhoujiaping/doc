@@ -43,22 +43,23 @@ s 仅由数字组成
  			...
  */
 var restoreIpAddresses = function(s) {
-	let ans = []
-	if(s.length<4){
+	return trySplit(s,1)
+	function trySplit(s,partsNum){
+		if(partsNum==4){
+		    if(s=='' || s>255 || (s.length>1&&s[0]=='0')){
+		        return []
+		    }else{
+		        return [s]
+		    }
+		}
+		let ans = []
+		for(let i=1;i<=3;i++){
+		    let part = s.substr(0,i)
+		    if(part>255 || part.length>1&&part[0]=='0')continue
+		    trySplit(s.substr(i),partsNum+1).forEach(it=>ans.push(part+'.'+it))
+		}
 		return ans
 	}
-	trySplit(1,1,1,s.length-3)
-	function trySplit(fst,snd,thd,last){
-		if(last<1){
-			return
-		}
-		
-		let fstNum = s.substr(0,fst)
-		if(fstNum!='0'&&(+fstNum)==0){
-			return
-		}
-		if((+fstNum)>255){
-			return
-		}
-	}
 };
+let s = "101023"
+console.info(restoreIpAddresses(s))

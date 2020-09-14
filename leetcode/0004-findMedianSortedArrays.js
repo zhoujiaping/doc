@@ -13,6 +13,11 @@ nums1 = [1, 2]
 nums2 = [3, 4]
 则中位数是 (2 + 3)/2 = 2.5
 通过次数254,947提交次数658,097
+
+简单粗暴的解法：合并两个数组，排序，然后获取中位数。时间复杂度O((m+n)log(m+n)),空间复杂度O(m+n)
+
+如果复杂度不可接受，可以按如下方法优化。
+不断从两个数组中取值，丢弃较小的。直到循环次数达到(nums1.length+nums2.length)/2
  * @param {number[]} nums1
  * @param {number[]} nums2
  * @return {number}
@@ -55,7 +60,23 @@ findMedianSortedArrays = (nums1,nums2)=>{
     if(nums.length%2==1)return nums[nums.length>>1]
     else return (nums[nums.length/2-1]+nums[nums.length/2])/2
 }
-let nums1 = [2];
-let nums2 = [];
+findMedianSortedArrays = (nums1,nums2)=>{
+	let i1 = 0,i2 = 0,i = 0,mid = (nums1.length+nums2.length)/2|0
+	let prev,curr
+	while(i++<=mid){
+		if(i1==nums1.length){
+			prev=curr,curr=nums2[i2++]
+		}else if(i2==nums2.length){
+			prev=curr,curr=nums1[i1++]
+		}else if(nums1[i1]<nums2[i2]){
+			prev=curr,curr=nums1[i1++]
+		}else{
+			prev=curr,curr=nums2[i2++]
+		}
+	}
+	return (nums1.length+nums2.length)%2==1?curr:(prev+curr)/2
+}
+let nums1 = [1,2,3,4];
+let nums2 = [5];
 let res = findMedianSortedArrays(nums1,nums2);
 console.info(res);

@@ -49,6 +49,27 @@ var addTwoNumbers = function(l1, l2) {
     }
     return dummyHead.next
 };
+addTwoNumbers = (l1,l2)=>{
+    let dummy = {next:null},p0=dummy
+    let p1 = l1,p2 = l2,p
+    let carry = 0
+    while(p1&&p2){
+        p = {val:p1.val+p2.val+carry}
+        carry = p.val/10|0
+        p.val = p.val%10
+        p0.next = p,p0=p
+        p1 = p1.next,p2 = p2.next
+    }
+    if(p1==null)p1=p2
+    while(p1!=null){
+        p = {val:p1.val+carry}
+        carry = p.val/10|0
+        p.val = p.val%10
+        p0.next = p,p0=p
+        p1 = p1.next
+    }
+    return dummy.next
+}
 function arrayToListNode(array){
     let dummyHead = {}
     let curr = dummyHead

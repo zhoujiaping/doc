@@ -22,17 +22,22 @@
  * 方法一 要判断是否重复，就要查找是否已遍历该字符，适合用hash结构。
  * 使用一个hash结构保存字符的下标。下一次遇到该字符，那么就可以得到该字符之间的字符个数。
  * 中间过程可能有其他字符重复了，所以还需要比较
+
+ 假设以s的第j个字符（下标从0开始）的最长无重复子串为s(i,j)。
+ 如果s[j+1]在s(i,j)出现过，下标为x1，以j+1结尾的最长无重复子串为s(x1+1,j+1)。
+ 否则以j+1结尾的最长无重复子串为s(i,j+1)。
+ 不断增长j，并且同时记录最长无重复子串。
  */
 var lengthOfLongestSubstring = function(s) {
  	let dict = new Map()
 	let begin = 0
 	let max = 0
-    let index = 0
+  let index = 0
 	for(let j = 0;j<s.length;j++){
 		index = dict.get(s[j])
 		if(index!=null && index>=begin){
-            max = Math.max(max,j-begin)
-            begin = index+1
+        max = Math.max(max,j-begin)
+        begin = index+1
 		}
 		dict.set(s[j],j)
 	} 

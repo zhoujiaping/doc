@@ -28,21 +28,40 @@
  * @return {number}
  */
 var maxProfit = function(prices) {
-	let minPrice = Infinity
-	//dp[i][j]为第i天到第j天的最大收益(j>=i)
-	/**
-	若
-	dp[i][j]
-	*/
-	let dp = prices.map(_=>[])
-	for(let i=0;i<prices.length;i++){
-		if(prices[i] - minPrice<0){
-			minPrice = prices[i]
-		}else if(prices[i] - minPrice>0){
-			profit = Math.max(prices[i] - minPrice+maxProfit(),)
+	prices.push(0)
+	let step = 'buy'
+	let minPrice = Infinity,maxPrice=-Infinity
+	let profit = 0
+	for(let it of prices){
+		if(step=='buy' && it<minPrice){
+			minPrice = it
+		}else if(it>=maxPrice){
+			step = 'sale'
+			maxPrice = it
+		}else{
+			profit+=maxPrice-minPrice
+			minPrice = it
+			maxPrice = -Infinity
+			step = 'buy'
 		}
-		if(prices[i]-minPrice>profit)profit = prices[i]-minPrice
 	}
 	return profit
-    
 };
+
+var maxProfit = function(prices) {
+	let profit = 0
+	for(let i=1;i<prices.length;i++){
+		if(prices[i]>prices[i-1])
+		profit+=prices[i]-prices[i-1]
+	}
+	return profit
+};
+maxProfit = prices => prices.slice(1).map((it,i)=>it>prices[i]?it-prices[i]:0).reduce((prev,curr)=>prev+curr,0)
+let pricesList = [
+	[7,1,5,3,6,4],
+	[1,2,3,4,5],
+	[7,6,4,3,1],
+	[3,2,6,5,0,3],
+	[1]
+]
+pricesList.forEach(it=>console.info(maxProfit(it)))

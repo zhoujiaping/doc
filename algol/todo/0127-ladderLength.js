@@ -41,22 +41,57 @@ wordList = ["hot","dot","dog","lot","log"]
  * @return {number}
  */
 var ladderLength = function(beginWord, endWord, wordList) {
-    let targetDiff = distance(beginWord,endWord)
-    let wordsList = [],diff
-    wordList.forEach(w=>{
-    	diff = distance(beginWord,w)
-    	if(wordsList[diff]==null)wordsList[diff]=[]
-    	wordsList[diff].push(w)
-    })
-    //console.info(wordsList)
-    if(wordsList!=null && wordsList.indexOf(beginWord)>-1)return 0
-
- 	function nextWords(word,words,row){
- 		
- 	}
+    wordList.unshift(beginWord)
+	let nextMap = new Map()
+	wordList.forEach(w=>{
+		nextMap.set(w,wordList.filter(it=>distance(w,it)==1))
+	})
+	//console.info(nextMap)
+	let minLen = 0
+	let root = {word:beginWord}
+	bfs([root],new Set([beginWord]))
+	return minLen
+	function bfs(nodes,visited) {
+	    let size = visited.size
+	    let allNextNodes = []
+	    for(let node of nodes){
+	        let nexts = nextMap.get(node.word)
+	        let nextNodes = []
+            nexts = nexts.filter(it=>!visited.has(it))
+            for(let it of nexts){
+                let child = {word:it,parent:node}
+                nextNodes.push(child)
+                if(it==endWord){
+                    minLen = getPath(child).length
+                    return
+                }
+            }
+            node.children = nextNodes
+            allNextNodes.push(...nextNodes)
+	    }
+	    allNextNodes.forEach(it=>visited.add(it.word))
+	    //没有后续路径，停止搜索
+	    if(size==visited.size)return
+	    bfs(allNextNodes,visited)
+	};
 };
+
+function getPath(node){
+    let item = []
+    while(node){
+        item.unshift(node.word)
+        node = node.parent
+    }
+    return item
+}
+//该方法优化后，性能提升很大，从4804ms提升到1300ms
 function distance(word1,word2){
-	return [...word1].map((it,i)=>it==word2[i]?0:1).reduce((prev,curr)=>prev+curr)
+	//return [...word1].map((it,i)=>it==word2[i]?0:1).reduce((prev,curr)=>prev+curr,0)
+	let diff = 0
+	for(let i=0;i<word1.length;i++){
+	    if(word1[i]!=word2[i])diff++
+	}
+	return diff
 }
 let beginWord = "hit"
 let endWord = "cog"

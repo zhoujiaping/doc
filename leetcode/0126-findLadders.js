@@ -37,33 +37,50 @@ wordList = ["hot","dot","dog","lot","log"]
 var findLadders = function(beginWord, endWord, wordList) {
 	let minLen = Infinity
 	let nextMap = new Map()
-	wordList.forEach(it=>{
-		nextMap.set(it,wordList.filter(it=>distance(beginWord,it)==1))
+	nextMap.set(beginWord,wordList.filter(it=>distance(beginWord,it)==1))
+	wordList.forEach(w=>{
+		nextMap.set(w,wordList.filter(it=>distance(w,it)==1))
 	})
-	console.info(nextMap)
-	let ans =  findLadders0(beginWord,endWord,wordList,new Set()).map(it=>[beginWord].concat(it))
+	//console.info(nextMap)
+	let ans = []
+	let root = {word:beginWord}
+	bfs([root],new Set())
+	console.info(root)
+    //return ans.filter(it=>it.length==minLen)
 	return ans
-	function findLadders0(beginWord, endWord, wordList, prevs) {
-		if(prevs.size>=minLen)return []
-		let nexts = nextMap.get(beginWord)
-		if(nexts==null){
-			nexts = wordList.filter(it=>distance(beginWord,it)==1)
-			nextMap.set(beginWord,nexts)
-		}
-		nexts = nexts.filter(it=>!prevs.has(it))
-		if(nexts.length==0)return []
-		let ans = []
-		for(let next of nexts){
-			if(next == endWord){
-				minLen = Math.min(minLen,prevs.size+1)
-				return [[next]]
-			}
-			let paths = findLadders0(next,endWord,wordList,new Set([next,...prevs]))
-			ans.push(...paths.map(it=>[next].concat(it)))
-		}
-		return ans
+	function bfs(nodes,visited) {
+	    let size = visited.size
+	    let allNextNodes = []
+	    for(let node of nodes){
+	        let nexts = nextMap.get(node.word)
+	        let nextNodes = []
+            nexts = nexts.filter(it=>!visited.has(it))
+            nexts.forEach(it=>{
+                let child = {word:it,parent:node}
+                nextNodes.push(child)
+                if(it==endWord){
+                    ans.push(getPath(child))
+                }
+            })
+            allNextNodes.push(...nextNodes)
+            node.children = nextNodes
+	    }
+	    //已找到最短路径，停止搜索
+	    if(ans.length>0)return
+	    allNextNodes.forEach(it=>visited.add(it.word))
+	    //没有后续路径，停止搜索
+	    if(size==visited.size)return
+	    bfs(allNextNodes.filter(it=>!visited.has(it)),visited)
 	};
 };
+function getPath(node){
+    let item = []
+    while(node){
+        item.unshift(node.word)
+        node = node.parent
+    }
+    return item
+}
 function distance(word1,word2){
 	return [...word1].map((it,i)=>it==word2[i]?0:1).reduce((prev,curr)=>prev+curr,0)
 }
@@ -80,8 +97,10 @@ let wordList = ["hot","dot","dog","lot","log","cog"]
 //endWord = "dot"
 //wordList = ["hot","dot","dog","log"]
 
-//beginWord = "qa"
-//endWord = "sq"
-//wordList = ["si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"]
-//wordList = wordList.slice(0,28)
+beginWord = "qa"
+endWord = "sq"
+wordList = ["si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"]
+let beginTime = new Date().getTime()
 console.info(findLadders(beginWord,endWord,wordList))
+let endTime = new Date().getTime()
+console.info(endTime - beginTime)

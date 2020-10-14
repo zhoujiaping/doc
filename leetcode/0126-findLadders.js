@@ -35,18 +35,15 @@ wordList = ["hot","dot","dog","lot","log"]
  * @return {string[][]}
  */
 var findLadders = function(beginWord, endWord, wordList) {
-	let minLen = Infinity
+    wordList.unshift(beginWord)
 	let nextMap = new Map()
-	nextMap.set(beginWord,wordList.filter(it=>distance(beginWord,it)==1))
 	wordList.forEach(w=>{
 		nextMap.set(w,wordList.filter(it=>distance(w,it)==1))
 	})
 	//console.info(nextMap)
 	let ans = []
 	let root = {word:beginWord}
-	bfs([root],new Set())
-	console.info(root)
-    //return ans.filter(it=>it.length==minLen)
+	bfs([root],new Set([beginWord]))
 	return ans
 	function bfs(nodes,visited) {
 	    let size = visited.size
@@ -62,15 +59,15 @@ var findLadders = function(beginWord, endWord, wordList) {
                     ans.push(getPath(child))
                 }
             })
-            allNextNodes.push(...nextNodes)
             node.children = nextNodes
+            allNextNodes.push(...nextNodes)
 	    }
 	    //已找到最短路径，停止搜索
 	    if(ans.length>0)return
 	    allNextNodes.forEach(it=>visited.add(it.word))
 	    //没有后续路径，停止搜索
 	    if(size==visited.size)return
-	    bfs(allNextNodes.filter(it=>!visited.has(it)),visited)
+	    bfs(allNextNodes,visited)
 	};
 };
 function getPath(node){
@@ -82,7 +79,21 @@ function getPath(node){
     return item
 }
 function distance(word1,word2){
-	return [...word1].map((it,i)=>it==word2[i]?0:1).reduce((prev,curr)=>prev+curr,0)
+	//return [...word1].map((it,i)=>it==word2[i]?0:1).reduce((prev,curr)=>prev+curr,0)
+	let diff = 0
+	for(let i=0;i<word1.length;i++){
+	    if(word1[i]!=word2[i])diff++
+	}
+	return diff
+}
+//该方法优化后，性能提升很大，从4804ms提升到1300ms
+function distance(word1,word2){
+	//return [...word1].map((it,i)=>it==word2[i]?0:1).reduce((prev,curr)=>prev+curr,0)
+	let diff = 0
+	for(let i=0;i<word1.length;i++){
+	    if(word1[i]!=word2[i])diff++
+	}
+	return diff
 }
 let beginWord = "hit"
 let endWord = "cog"
@@ -97,9 +108,9 @@ let wordList = ["hot","dot","dog","lot","log","cog"]
 //endWord = "dot"
 //wordList = ["hot","dot","dog","log"]
 
-beginWord = "qa"
-endWord = "sq"
-wordList = ["si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"]
+//beginWord = "qa"
+//endWord = "sq"
+//wordList = ["si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"]
 let beginTime = new Date().getTime()
 console.info(findLadders(beginWord,endWord,wordList))
 let endTime = new Date().getTime()

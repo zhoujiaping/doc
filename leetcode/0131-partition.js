@@ -20,22 +20,41 @@
  * @return {string[][]}
  */
 var partition = function(s) {
-	if(s==''){
-		return []
-	}
-	if(s.length==1)return [[s]]
-	if(s.length==2){
-		if(s[0]==s[1]){
-			return [[s[0],s[1]],[s]]	
+	return part(s)
+	//判断是否回文
+	function isPalindrome(s){
+		if(s.length>2){
+			return isPalindrome(s.substring(1,s.length-1))&&s[0]==s[s.length-1]
+			//下面的代码可以优化性能
+			/*let i=0,j=s.length-1
+			while(i<j){
+				if(s[i++]!=s[j--])return false
+			}
+			return true*/
+		}else if(s.length==2){
+			return s[0]==s[1]
+		}else{
+			return true
 		}
 	}
-	let ans = []
-	for(let i=1;i<s.length;i++){
-		let p1 = partition(s.substring(0,i))
-		let p2 = partition(s.substring(i))
-		ans.push(...[].concat.apply([],p1.map(it1=>p2.map(it2=>it1.concat(it2)))))
+	//返回字符串的回文组合
+	function part(str){
+		let s1,s2,ans = []
+		//判断整个字符串是否回文
+		if(isPalindrome(str)){
+			ans.push([str])
+		}
+		//将字符串切割为两部分,如果第一部分为回文,则将第一部分和剩下部分的回文组合再进行组合
+		for(let i=1;i<str.length;i++){
+			s1 = str.substring(0,i)
+			if(isPalindrome(s1)){
+				s2 = str.substring(i)
+				ans.push(...part(s2).map(it=>[s1].concat(it)))
+			}
+		}
+		return ans
 	}
-	return ans
 };
 let s = 'aab'
-console.info(partition(s))
+s = "amanaplanacanalpanama"
+console.info(partition(s).length)

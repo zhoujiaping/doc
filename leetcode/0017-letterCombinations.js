@@ -20,6 +20,9 @@ null,['a','b','c'],['d','e','f'],
 var letterCombinations = function(digits) {
 	if(digits==='')return []
 	if(digits.length==1)return letters[digits]
-	return Array.prototype.concat.apply([],letters[digits[0]].map(i=>letterCombinations(digits.substring(1)).map(item=>i+item)))
+	return Array.prototype.concat.apply([],
+	    letters[digits[0]]
+	        .map(i=>letterCombinations(digits.substring(1))
+	        .map(item=>i+item)))
 };
 console.info(letterCombinations('4'))
